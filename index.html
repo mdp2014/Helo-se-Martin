@@ -3,24 +3,28 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DysHelp — Intro stable + Fond stylé + Approche</title>
+  <title>DysHelp — Mobile Menu Fix + Intro + Fond stylé</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { font-family: 'Comic Sans MS', cursive, sans-serif !important; }
 
-    /* Utilitaires */
+    /* Utilitaires et transitions */
     .smooth{transition:all .6s cubic-bezier(.2,.8,.2,1)}
-    .menu-open{transform:translateX(0)} .menu-closed{transform:translateX(-100%)}
-    .fade-in{opacity:1;transform:translateY(0)} .fade-out{opacity:0;transform:translateY(20px)}
+    .menu-open{transform:translateX(0)}
+    .menu-closed{transform:translateX(-100%)}
+    .fade-in{opacity:1;transform:translateY(0)}
+    .fade-out{opacity:0;transform:translateY(20px)}
     .section-content{transition:opacity .3s ease, transform .3s ease}
-    .card-hover{transition:all .3s ease} .card-hover:hover{transform:translateY(-5px);box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04)}
+    .card-hover{transition:all .3s ease}
+    .card-hover:hover{transform:translateY(-5px);box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04)}
 
-    /* Fond animé stable */
+    /* Fond animé */
     @keyframes gradientShift{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-6%,-4%,0) scale(1.06)}100%{transform:translate3d(0,0,0) scale(1)}}
     .animate-gradient{animation:gradientShift 18s ease-in-out infinite}
     @keyframes blobFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.03)}}
     .animate-blob{animation:blobFloat 10s ease-in-out infinite}
-    .animate-blob-delayed{animation-delay:2.5s} .animate-blob-slow{animation-duration:14s}
+    .animate-blob-delayed{animation-delay:2.5s}
+    .animate-blob-slow{animation-duration:14s}
     .mesh-dot{transition:transform .6s ease,opacity .6s ease;opacity:.45}
     .mesh-dot:hover{transform:scale(1.8);opacity:.95}
     .vignette{pointer-events:none;background:radial-gradient(1200px 600px at center, rgba(0,0,0,0) 40%, rgba(0,0,0,.08) 100%)}
@@ -28,8 +32,8 @@
     .cursor-halo{position:fixed;inset:0;pointer-events:none;background:radial-gradient(460px 300px at var(--mx,50%) var(--my,50%), rgba(255,255,255,var(--haloAlpha,.22)), transparent 60%);transition:background .12s ease;z-index:2}
     .cursor-flash{background:radial-gradient(560px 360px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.25), transparent 65%)}
 
-    /* INTRO fiable (sans SVG complexe) */
-    .intro-wrap{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%, #0f172a, #020617 60%);overflow:hidden}
+    /* INTRO (simple et fiable) */
+    .intro-wrap{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%, #0f172a, #020617 60%);overflow:hidden}
     .intro-stage{position:relative;width:min(92vw,780px);height:min(50vw,380px)}
     .logo-badge{position:absolute;inset:0;display:grid;place-items:center;opacity:1;transform:scale(1);transition:opacity .4s ease, transform .4s ease}
     .logo-mark{width:120px;height:120px;border-radius:28%;background:
@@ -46,13 +50,12 @@
 
     .eraser{position:absolute;top:50%;transform:translateY(-50%);left:60%;width:58px;height:40px;border-radius:8px;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,#fda4af,#fb7185);box-shadow:0 14px 40px rgba(251,113,133,.35)}
     .eraser::after{content:"";width:65%;height:40%;border-radius:6px;background:linear-gradient(135deg,#fef3c7,#fde68a);transform:rotate(-12deg)}
-
     .intro-exit{animation:introExit .8s cubic-bezier(.2,.85,.2,1) forwards}
     @keyframes introExit{0%{opacity:1;transform:scale(1)}60%{opacity:.85;transform:scale(1.03)}100%{opacity:0;transform:scale(1.08);visibility:hidden}}
   </style>
 </head>
 <body class="min-h-screen bg-white text-gray-800 overflow-x-hidden relative">
-  <!-- INTRO fiable -->
+  <!-- INTRO -->
   <div id="intro" class="intro-wrap">
     <div class="intro-stage">
       <div id="logoBadge" class="logo-badge"><div class="logo-mark"></div></div>
@@ -82,19 +85,18 @@
     <div id="layer-mesh" class="absolute inset-0 opacity-75 will-change-transform">
       <div id="meshContainer" class="grid grid-cols-10 gap-8 w-[1400px] max-w-none pointer-events-none smooth" style="transform:translate(-12%,-12%)">
         <div class="contents">
-          <!-- 100 points (10 x 10) -->
-          <!-- rangs 1..10 -->
-          <!-- On écrit 100 spans pour stabilité -->
-          <!-- 1 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 2 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 3 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 4 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 5 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 6 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 7 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 8 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 9 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
-          <!-- 10 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 100 points (10x10) -->
+          <!-- 10 lignes de 10 points -->
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
         </div>
       </div>
     </div>
@@ -115,7 +117,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center py-4">
         <div class="text-2xl font-bold text-emerald-600">📚 DysHelp</div>
-        <button id="menuToggle" class="lg:hidden p-2 rounded-md text-gray-700 hover:text-emerald-600 hover:bg-white/70">
+        <button id="menuToggle" class="lg:hidden p-2 rounded-md text-gray-700 hover:text-emerald-600 hover:bg-white/70" aria-label="Ouvrir le menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
         <nav class="hidden lg:flex flex-wrap gap-4">
@@ -132,11 +134,11 @@
     </div>
   </header>
 
-  <!-- Menu mobile -->
-  <div id="mobileMenu" class="fixed inset-y-0 left-0 z-40 w-64 bg-white/90 backdrop-blur shadow-xl transform menu-closed transition-transform duration-300 ease-in-out lg:hidden">
+  <!-- Menu mobile (OUVERT par défaut sur mobile) -->
+  <div id="mobileMenu" class="fixed inset-y-0 left-0 z-[60] w-64 bg-white/90 backdrop-blur shadow-xl transform menu-open transition-transform duration-300 ease-in-out lg:hidden">
     <div class="flex items-center justify-between p-4 border-b">
       <span class="text-xl font-semibold text-emerald-600">☰ Menu</span>
-      <button id="closeMenu" class="p-2 rounded-md text-gray-700 hover:text-emerald-600 hover:bg-gray-100">
+      <button id="closeMenu" class="p-2 rounded-md text-gray-700 hover:text-emerald-600 hover:bg-gray-100" aria-label="Fermer le menu">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
@@ -151,7 +153,8 @@
       <button onclick="showSection('contact'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-50 hover:text-gray-900">Contact</button>
     </nav>
   </div>
-  <div id="overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="closeMobileMenu()"></div>
+  <!-- Voile (VISIBLE par défaut sur mobile) -->
+  <div id="overlay" class="fixed inset-0 bg-black/40 z-[55] lg:hidden"></div>
 
   <!-- Contenu -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
@@ -198,7 +201,12 @@
           <div class="grid md:grid-cols-2 gap-8">
             <div>
               <h2 class="text-2xl font-semibold text-gray-800 mb-4">🎯 Objectifs</h2>
-              <ul class="space-y-2 text-gray-700"><li>• Identifier les difficultés</li><li>• Comprendre les causes</li><li>• Développer des stratégies</li><li>• Favoriser la réussite</li></ul>
+              <ul class="space-y-2 text-gray-700">
+                <li>• Identifier les difficultés</li>
+                <li>• Comprendre les causes</li>
+                <li>• Développer des stratégies</li>
+                <li>• Favoriser la réussite</li>
+              </ul>
             </div>
             <div>
               <h2 class="text-2xl font-semibold text-gray-800 mb-4">👥 Public</h2>
@@ -226,12 +234,36 @@
           <div class="w-24 h-1 bg-pink-600 mx-auto"></div>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="bg-gradient-to-br from-emerald-50 to-green-100 p-6 rounded-lg border-l-4 border-emerald-500 card-hover"><div class="text-3xl mb-4">📖</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Lecture</h3><p class="text-gray-700">Dyslexie, décodage, compréhension.</p></div>
-          <div class="bg-gradient-to-br from-pink-50 to-rose-100 p-6 rounded-lg border-l-4 border-pink-500 card-hover"><div class="text-3xl mb-4">✍️</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Écriture</h3><p class="text-gray-700">Dysgraphie, dysorthographie, expression.</p></div>
-          <div class="bg-gradient-to-br from-amber-50 to-yellow-100 p-6 rounded-lg border-l-4 border-amber-600 card-hover"><div class="text-3xl mb-4">🔢</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Maths</h3><p class="text-gray-700">Dyscalculie, raisonnement logique.</p></div>
-          <div class="bg-gradient-to-br from-stone-50 to-neutral-100 p-6 rounded-lg border-l-4 border-stone-600 card-hover"><div class="text-3xl mb-4">🧠</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Fonctions exécutives</h3><p class="text-gray-700">Attention, mémoire, planification.</p></div>
-          <div class="bg-gradient-to-br from-rose-50 to-pink-100 p-6 rounded-lg border-l-4 border-rose-500 card-hover"><div class="text-3xl mb-4">🎯</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Méthodes</h3><p class="text-gray-700">Stratégies d’apprentissage efficaces.</p></div>
-          <div class="bg-gradient-to-br from-gray-50 to-slate-100 p-6 rounded-lg border-l-4 border-gray-600 card-hover"><div class="text-3xl mb-4">👥</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Familles</h3><p class="text-gray-700">Conseils à la maison.</p></div>
+          <div class="bg-gradient-to-br from-emerald-50 to-green-100 p-6 rounded-lg border-l-4 border-emerald-500 card-hover">
+            <div class="text-3xl mb-4">📖</div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Lecture</h3>
+            <p class="text-gray-700">Dyslexie, décodage, compréhension.</p>
+          </div>
+          <div class="bg-gradient-to-br from-pink-50 to-rose-100 p-6 rounded-lg border-l-4 border-pink-500 card-hover">
+            <div class="text-3xl mb-4">✍️</div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Écriture</h3>
+            <p class="text-gray-700">Dysgraphie, dysorthographie, expression.</p>
+          </div>
+          <div class="bg-gradient-to-br from-amber-50 to-yellow-100 p-6 rounded-lg border-l-4 border-amber-600 card-hover">
+            <div class="text-3xl mb-4">🔢</div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Maths</h3>
+            <p class="text-gray-700">Dyscalculie, raisonnement logique.</p>
+          </div>
+          <div class="bg-gradient-to-br from-stone-50 to-neutral-100 p-6 rounded-lg border-l-4 border-stone-600 card-hover">
+            <div class="text-3xl mb-4">🧠</div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Fonctions exécutives</h3>
+            <p class="text-gray-700">Attention, mémoire, planification.</p>
+          </div>
+          <div class="bg-gradient-to-br from-rose-50 to-pink-100 p-6 rounded-lg border-l-4 border-rose-500 card-hover">
+            <div class="text-3xl mb-4">🎯</div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Méthodes</h3>
+            <p class="text-gray-700">Stratégies d’apprentissage efficaces.</p>
+          </div>
+          <div class="bg-gradient-to-br from-gray-50 to-slate-100 p-6 rounded-lg border-l-4 border-gray-600 card-hover">
+            <div class="text-3xl mb-4">👥</div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Familles</h3>
+            <p class="text-gray-700">Conseils à la maison.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -363,10 +395,34 @@
     const closeMenuBtn=document.getElementById('closeMenu');
     const mobileMenu=document.getElementById('mobileMenu');
     const overlay=document.getElementById('overlay');
-    function openMobileMenu(){mobileMenu.classList.remove('menu-closed');mobileMenu.classList.add('menu-open');overlay.classList.remove('hidden')}
-    function closeMobileMenu(){mobileMenu.classList.remove('menu-open');mobileMenu.classList.add('menu-closed');overlay.classList.add('hidden')}
-    if(menuToggle)menuToggle.addEventListener('click',openMobileMenu);
-    if(closeMenuBtn)closeMenuBtn.addEventListener('click',closeMobileMenu);
+    const intro=document.getElementById('intro');
+
+    function openMobileMenu(){
+      // S'assure que l'intro ne bloque pas sur mobile
+      if (intro && window.matchMedia('(max-width: 1024px)').matches) {
+        intro.style.display='none';
+      }
+      mobileMenu.classList.remove('menu-closed'); mobileMenu.classList.add('menu-open');
+      overlay.classList.remove('hidden');
+    }
+    function closeMobileMenu(){
+      mobileMenu.classList.remove('menu-open'); mobileMenu.classList.add('menu-closed');
+      overlay.classList.add('hidden');
+    }
+
+    // Ouvre/ferme via boutons et voile
+    if(menuToggle) menuToggle.addEventListener('click', ()=> {
+      if (mobileMenu.classList.contains('menu-open')) { closeMobileMenu(); } else { openMobileMenu(); }
+    });
+    if(closeMenuBtn) closeMenuBtn.addEventListener('click', closeMobileMenu);
+    if(overlay) overlay.addEventListener('click', closeMobileMenu);
+
+    // À l'arrivée sur mobile: menu ouvert + intro masquée, overlay visible
+    document.addEventListener('DOMContentLoaded', ()=>{
+      if (window.matchMedia('(max-width: 1024px)').matches) {
+        openMobileMenu();
+      }
+    });
 
     /* Navigation sections */
     function showSection(id){
@@ -376,7 +432,7 @@
     }
     document.addEventListener('DOMContentLoaded',()=>{showSection('about')});
 
-    /* Fond: toggles + interactions souris */
+    /* Fond: toggles + interactions */
     const layerGrad=document.getElementById('layer-grad');
     const layerBlobs=document.getElementById('layer-blobs');
     const layerMesh=document.getElementById('layer-mesh');
@@ -402,9 +458,11 @@
     function hexToRgba(hex,a){const c=hex.replace('#','');const n=parseInt(c,16);const r=(n>>16)&255,g=(n>>8)&255,b=n&255;return`rgba(${r},${g},${b},${a})`}
     function flash(el){el.classList.add('ring-4','ring-white/40');setTimeout(()=>el.classList.remove('ring-4','ring-white/40'),250)}
 
+    // Parallax + halo
     let lastX=0,lastY=0,lastTime=performance.now();
     window.addEventListener('mousemove',e=>{
-      const x=e.clientX,y=e.clientY;halo.style.setProperty('--mx',x+'px');halo.style.setProperty('--my',y+'px');
+      const x=e.clientX,y=e.clientY; if(!halo) return;
+      halo.style.setProperty('--mx',x+'px');halo.style.setProperty('--my',y+'px');
       const now=performance.now(),dt=Math.max(1,now-lastTime);const vx=(x-lastX)/dt,vy=(y-lastY)/dt,speed=Math.min(1,Math.hypot(vx,vy)*20);
       halo.style.setProperty('--haloAlpha',(0.2+speed*0.25).toFixed(3));
       if(speed>0.25){halo.classList.add('cursor-flash');clearTimeout(halo._to);halo._to=setTimeout(()=>halo.classList.remove('cursor-flash'),120)}
@@ -417,23 +475,19 @@
       lastX=x;lastY=y;lastTime=now;
     });
 
-    /* Intro ultra simple et fiable (typage + gomme) */
-    const intro=document.getElementById('intro');
+    /* INTRO: écriture fautive -> gomme -> correction, mais on la masque d’office sur mobile pour ne pas bloquer le menu */
     const logoBadge=document.getElementById('logoBadge');
     const typedText=document.getElementById('typedText');
     const eraser=document.getElementById('eraser');
-    const wrong="Dishelp"; // faute
-    const right="DysHelp"; // correct
-
-    function typeText(text,speed,cb){
-      let i=0; const it=setInterval(()=>{typedText.textContent=text.slice(0,++i); if(i>=text.length){clearInterval(it); cb&&setTimeout(cb,250)}}, speed);
-    }
-    function backspace(count,speed,cb){
-      let i=0; const it=setInterval(()=>{typedText.textContent=typedText.textContent.slice(0,-1); if(++i>=count){clearInterval(it); cb&&setTimeout(cb,150)}}, speed);
-    }
-
+    const wrong="Dishelp"; const right="DysHelp";
+    function typeText(text,speed,cb){let i=0;const it=setInterval(()=>{typedText.textContent=text.slice(0,++i);if(i>=text.length){clearInterval(it);cb&&setTimeout(cb,250)}},speed)}
+    function backspace(count,speed,cb){let i=0;const it=setInterval(()=>{typedText.textContent=typedText.textContent.slice(0,-1);if(++i>=count){clearInterval(it);cb&&setTimeout(cb,150)}},speed)}
     window.addEventListener('load',()=>{
-      // Petit logo puis écriture
+      if (window.matchMedia('(max-width: 1024px)').matches) {
+        // Mobile: on masque l’intro pour laisser le menu visible
+        if (intro) intro.style.display='none';
+        return;
+      }
       setTimeout(()=>{
         logoBadge.classList.add('logo-hide');
         setTimeout(()=>{
@@ -441,14 +495,13 @@
             const idx=wrong.indexOf('i');
             if(idx>=0){
               eraser.style.display='flex';
-              // recule jusqu'à la lettre fautive incluse
               backspace(wrong.length-idx,80,()=>{
                 typeText(right.slice(idx),85,()=>{
                   eraser.style.display='none';
                   setTimeout(()=>{intro.classList.add('intro-exit'); setTimeout(()=>intro.style.display='none',800)},400);
                 });
               });
-            }else{
+            } else {
               setTimeout(()=>{intro.classList.add('intro-exit'); setTimeout(()=>intro.style.display='none',800)},500);
             }
           });
@@ -465,5 +518,5 @@
     /* Init fond */
     setVisibility();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97e895f473edf0cb',t:'MTc1Nzc3NjM3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97e93c18c75d3843',t:'MTc1Nzc4MzE4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
