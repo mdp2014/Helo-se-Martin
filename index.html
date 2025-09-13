@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DysHelp — Intro stable + Fond stylé + Approche</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { font-family: 'Comic Sans MS', cursive, sans-serif !important; }
+
+    /* Utilitaires */
+    .smooth{transition:all .6s cubic-bezier(.2,.8,.2,1)}
+    .menu-open{transform:translateX(0)} .menu-closed{transform:translateX(-100%)}
+    .fade-in{opacity:1;transform:translateY(0)} .fade-out{opacity:0;transform:translateY(20px)}
+    .section-content{transition:opacity .3s ease, transform .3s ease}
+    .card-hover{transition:all .3s ease} .card-hover:hover{transform:translateY(-5px);box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04)}
+
+    /* Fond animé stable */
+    @keyframes gradientShift{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-6%,-4%,0) scale(1.06)}100%{transform:translate3d(0,0,0) scale(1)}}
+    .animate-gradient{animation:gradientShift 18s ease-in-out infinite}
+    @keyframes blobFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.03)}}
+    .animate-blob{animation:blobFloat 10s ease-in-out infinite}
+    .animate-blob-delayed{animation-delay:2.5s} .animate-blob-slow{animation-duration:14s}
+    .mesh-dot{transition:transform .6s ease,opacity .6s ease;opacity:.45}
+    .mesh-dot:hover{transform:scale(1.8);opacity:.95}
+    .vignette{pointer-events:none;background:radial-gradient(1200px 600px at center, rgba(0,0,0,0) 40%, rgba(0,0,0,.08) 100%)}
+    .toggle-active{background:rgba(255,255,255,.9);color:#111827;border-color:rgba(255,255,255,.9)}
+    .cursor-halo{position:fixed;inset:0;pointer-events:none;background:radial-gradient(460px 300px at var(--mx,50%) var(--my,50%), rgba(255,255,255,var(--haloAlpha,.22)), transparent 60%);transition:background .12s ease;z-index:2}
+    .cursor-flash{background:radial-gradient(560px 360px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.25), transparent 65%)}
+
+    /* INTRO fiable (sans SVG complexe) */
+    .intro-wrap{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%, #0f172a, #020617 60%);overflow:hidden}
+    .intro-stage{position:relative;width:min(92vw,780px);height:min(50vw,380px)}
+    .logo-badge{position:absolute;inset:0;display:grid;place-items:center;opacity:1;transform:scale(1);transition:opacity .4s ease, transform .4s ease}
+    .logo-mark{width:120px;height:120px;border-radius:28%;background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 40%),
+      conic-gradient(from 0deg at 50% 50%, #06b6d4, #22c55e, #f59e0b, #06b6d4);
+      box-shadow:0 20px 60px rgba(0,0,0,.35);animation:logoPop 1.4s ease-in-out infinite}
+    @keyframes logoPop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.04)}}
+    .logo-hide{opacity:0;transform:scale(.9);pointer-events:none}
+
+    .write-wrap{position:absolute;inset:0;display:grid;place-items:center}
+    .write-line{font-size:clamp(36px,6vw,80px);color:#fff;font-weight:900;letter-spacing:.5px;text-shadow:0 12px 30px rgba(0,0,0,.35);white-space:nowrap}
+    .caret{display:inline-block;width:.08em;height:.9em;background:#fff;vertical-align:-0.05em;margin-left:.04em;border-radius:2px;animation:blink 1s steps(1,end) infinite}
+    @keyframes blink{0%,60%{opacity:1}61%,100%{opacity:0}}
+
+    .eraser{position:absolute;top:50%;transform:translateY(-50%);left:60%;width:58px;height:40px;border-radius:8px;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,#fda4af,#fb7185);box-shadow:0 14px 40px rgba(251,113,133,.35)}
+    .eraser::after{content:"";width:65%;height:40%;border-radius:6px;background:linear-gradient(135deg,#fef3c7,#fde68a);transform:rotate(-12deg)}
+
+    .intro-exit{animation:introExit .8s cubic-bezier(.2,.85,.2,1) forwards}
+    @keyframes introExit{0%{opacity:1;transform:scale(1)}60%{opacity:.85;transform:scale(1.03)}100%{opacity:0;transform:scale(1.08);visibility:hidden}}
+  </style>
+</head>
+<body class="min-h-screen bg-white text-gray-800 overflow-x-hidden relative">
+  <!-- INTRO fiable -->
+  <div id="intro" class="intro-wrap">
+    <div class="intro-stage">
+      <div id="logoBadge" class="logo-badge"><div class="logo-mark"></div></div>
+      <div class="write-wrap">
+        <div class="write-line">
+          <span id="typedText"></span><span class="caret"></span>
+        </div>
+        <div id="eraser" class="eraser" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOND stylé -->
+  <div id="bg-root" class="fixed inset-0 -z-10 overflow-hidden">
+    <div id="layer-grad" class="absolute inset-0 animate-gradient will-change-transform">
+      <div id="gradientA" class="absolute -inset-1 bg-[conic-gradient(at_20%_10%,#06b6d4_0deg,#22c55e_140deg,#f59e0b_280deg,#06b6d4_360deg)] opacity-70 blur-3xl"></div>
+      <div id="gradientB" class="absolute -inset-1 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,.4),transparent_40%),radial-gradient(circle_at_10%_90%,rgba(16,185,129,.35),transparent_35%)] mix-blend-screen"></div>
+    </div>
+    <div id="layer-blobs" class="absolute inset-0 will-change-transform">
+      <div id="blob1" class="absolute -top-24 -left-24 w-[520px] h-[520px] rounded-full bg-emerald-400/30 blur-3xl animate-blob"></div>
+      <div id="blob2" class="absolute top-40 -right-24 w-[480px] h-[480px] rounded-full bg-indigo-400/30 blur-3xl animate-blob animate-blob-delayed"></div>
+      <div id="blob3" class="absolute bottom-[-120px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-pink-400/25 blur-3xl animate-blob animate-blob-slow"></div>
+      <div id="g1" class="absolute top-16 left-10 w-40 h-40 rounded-3xl rotate-6 animate-blob" style="background:rgba(255,255,255,.66);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)"></div>
+      <div id="g2" class="absolute bottom-20 right-8 w-48 h-48 rounded-full -rotate-6 animate-blob-delayed" style="background:rgba(255,255,255,.66);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)"></div>
+      <div id="g3" class="absolute top-1/2 left-1/4 -translate-y-1/2 w-28 h-28 rounded-2xl animate-blob-slow" style="background:rgba(255,255,255,.66);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)"></div>
+    </div>
+    <div id="layer-mesh" class="absolute inset-0 opacity-75 will-change-transform">
+      <div id="meshContainer" class="grid grid-cols-10 gap-8 w-[1400px] max-w-none pointer-events-none smooth" style="transform:translate(-12%,-12%)">
+        <div class="contents">
+          <!-- 100 points (10 x 10) -->
+          <!-- rangs 1..10 -->
+          <!-- On écrit 100 spans pour stabilité -->
+          <!-- 1 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 2 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 3 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 4 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 5 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 6 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 7 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 8 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 9 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <!-- 10 --> <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+        </div>
+      </div>
+    </div>
+    <div class="absolute inset-0 vignette"></div>
+    <div id="cursorHalo" class="cursor-halo"></div>
+  </div>
+
+  <!-- Contrôles fond -->
+  <div class="fixed top-4 right-4 z-20 flex items-center gap-2">
+    <button id="btnGradient" class="smooth px-3 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 text-white">Gradient</button>
+    <button id="btnBlobs" class="smooth px-3 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 text-white">Blobs</button>
+    <button id="btnMesh" class="smooth px-3 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 text-white">Mesh</button>
+    <button id="btnShuffle" class="smooth px-3 py-2 rounded-lg border border-white/20 bg-emerald-500/80 hover:bg-emerald-500 text-white">Couleurs</button>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur shadow-lg sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <div class="text-2xl font-bold text-emerald-600">📚 DysHelp</div>
+        <button id="menuToggle" class="lg:hidden p-2 rounded-md text-gray-700 hover:text-emerald-600 hover:bg-white/70">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <nav class="hidden lg:flex flex-wrap gap-4">
+          <button onclick="showSection('about')" class="px-3 py-2 rounded-md font-medium text-gray-800 hover:text-emerald-600">À propos</button>
+          <button onclick="showSection('orthopedagogie')" class="px-3 py-2 rounded-md font-medium text-gray-800 hover:text-purple-600">Orthopédagogie</button>
+          <button onclick="showSection('services')" class="px-3 py-2 rounded-md font-medium text-gray-800 hover:text-pink-600">Services</button>
+          <button onclick="showSection('methods')" class="px-3 py-2 rounded-md font-medium text-gray-800 hover:text-amber-700">Méthodes</button>
+          <button onclick="showSection('approche')" class="px-3 py-2 rounded-md font-medium text-gray-800 hover:text-emerald-700">Approche</button>
+          <button onclick="showSection('skills')" class="px-3 py-2 rounded-md font-medium text-gray-800 hover:text-rose-600">Compétences</button>
+          <button onclick="showSection('tarifs')" class="px-3 py-2 rounded-md font-medium text-gray-800 hover:text-blue-600">Tarifs</button>
+          <button onclick="showSection('contact')" class="px-3 py-2 rounded-md font-medium text-gray-800 hover:text-gray-900">Contact</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu mobile -->
+  <div id="mobileMenu" class="fixed inset-y-0 left-0 z-40 w-64 bg-white/90 backdrop-blur shadow-xl transform menu-closed transition-transform duration-300 ease-in-out lg:hidden">
+    <div class="flex items-center justify-between p-4 border-b">
+      <span class="text-xl font-semibold text-emerald-600">☰ Menu</span>
+      <button id="closeMenu" class="p-2 rounded-md text-gray-700 hover:text-emerald-600 hover:bg-gray-100">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="mt-4">
+      <button onclick="showSection('about'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-emerald-50 hover:text-emerald-600">À propos</button>
+      <button onclick="showSection('orthopedagogie'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-purple-50 hover:text-purple-600">Orthopédagogie</button>
+      <button onclick="showSection('services'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600">Services</button>
+      <button onclick="showSection('methods'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-amber-50 hover:text-amber-700">Méthodes</button>
+      <button onclick="showSection('approche'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-emerald-50 hover:text-emerald-700">Approche</button>
+      <button onclick="showSection('skills'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-rose-50 hover:text-rose-600">Compétences</button>
+      <button onclick="showSection('tarifs'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-50 hover:text-blue-600">Tarifs</button>
+      <button onclick="showSection('contact'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-50 hover:text-gray-900">Contact</button>
+    </nav>
+  </div>
+  <div id="overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="closeMobileMenu()"></div>
+
+  <!-- Contenu -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+    <!-- À propos -->
+    <section id="about" class="section-content fade-in">
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8 card-hover">
+        <div class="text-center mb-8">
+          <div class="w-32 h-32 bg-emerald-100 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl">👩‍🏫</div>
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">À propos de moi</h1>
+          <div class="w-24 h-1 bg-emerald-600 mx-auto"></div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Mon parcours</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">Passionnée par l'apprentissage, j’accompagne enfants et ados avec une approche bienveillante et personnalisée.</p>
+            <p class="text-gray-700 leading-relaxed">Objectif: déployer le plein potentiel de chaque apprenant avec des méthodes adaptées.</p>
+          </div>
+          <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ma philosophie</h2>
+            <ul class="space-y-3 text-gray-700">
+              <li>✓ Bienveillance</li>
+              <li>✓ Méthodes fondées sur la recherche</li>
+              <li>✓ Travail avec les familles</li>
+              <li>✓ Adaptation individuelle</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Orthopédagogie -->
+    <section id="orthopedagogie" class="section-content fade-out hidden">
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8 card-hover">
+        <div class="text-center mb-8">
+          <div class="w-32 h-32 bg-purple-100 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl">🧠</div>
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">Qu'est-ce que l'orthopédagogie ?</h1>
+          <div class="w-24 h-1 bg-purple-600 mx-auto"></div>
+        </div>
+        <div class="space-y-8">
+          <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Définition</h2>
+            <p class="text-gray-700 leading-relaxed text-lg">Évaluation et intervention auprès des personnes présentant des difficultés d’apprentissage.</p>
+          </div>
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 class="text-2xl font-semibold text-gray-800 mb-4">🎯 Objectifs</h2>
+              <ul class="space-y-2 text-gray-700"><li>• Identifier les difficultés</li><li>• Comprendre les causes</li><li>• Développer des stratégies</li><li>• Favoriser la réussite</li></ul>
+            </div>
+            <div>
+              <h2 class="text-2xl font-semibold text-gray-800 mb-4">👥 Public</h2>
+              <div class="space-y-3">
+                <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500"><h3 class="font-semibold text-gray-800 mb-2">Enfants/ados</h3><p class="text-gray-600 text-sm">Difficultés d'apprentissage</p></div>
+                <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500"><h3 class="font-semibold text-gray-800 mb-2">Troubles spécifiques</h3><p class="text-gray-600 text-sm">Dyslexie, dysorthographie, dyscalculie, TDA/H</p></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">🔬 Approche</h2>
+            <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-6 rounded-lg border border-purple-200">
+              <p class="text-gray-700">Basée sur neurosciences, psycho cognitive et sciences de l’éducation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="section-content fade-out hidden">
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">Services et compétences</h1>
+          <div class="w-24 h-1 bg-pink-600 mx-auto"></div>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-gradient-to-br from-emerald-50 to-green-100 p-6 rounded-lg border-l-4 border-emerald-500 card-hover"><div class="text-3xl mb-4">📖</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Lecture</h3><p class="text-gray-700">Dyslexie, décodage, compréhension.</p></div>
+          <div class="bg-gradient-to-br from-pink-50 to-rose-100 p-6 rounded-lg border-l-4 border-pink-500 card-hover"><div class="text-3xl mb-4">✍️</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Écriture</h3><p class="text-gray-700">Dysgraphie, dysorthographie, expression.</p></div>
+          <div class="bg-gradient-to-br from-amber-50 to-yellow-100 p-6 rounded-lg border-l-4 border-amber-600 card-hover"><div class="text-3xl mb-4">🔢</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Maths</h3><p class="text-gray-700">Dyscalculie, raisonnement logique.</p></div>
+          <div class="bg-gradient-to-br from-stone-50 to-neutral-100 p-6 rounded-lg border-l-4 border-stone-600 card-hover"><div class="text-3xl mb-4">🧠</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Fonctions exécutives</h3><p class="text-gray-700">Attention, mémoire, planification.</p></div>
+          <div class="bg-gradient-to-br from-rose-50 to-pink-100 p-6 rounded-lg border-l-4 border-rose-500 card-hover"><div class="text-3xl mb-4">🎯</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Méthodes</h3><p class="text-gray-700">Stratégies d’apprentissage efficaces.</p></div>
+          <div class="bg-gradient-to-br from-gray-50 to-slate-100 p-6 rounded-lg border-l-4 border-gray-600 card-hover"><div class="text-3xl mb-4">👥</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Familles</h3><p class="text-gray-700">Conseils à la maison.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Méthodes -->
+    <section id="methods" class="section-content fade-out hidden">
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">Méthodes et approche</h1>
+          <div class="w-24 h-1 bg-amber-600 mx-auto"></div>
+        </div>
+        <div class="space-y-8">
+          <div class="border-l-4 border-emerald-600 pl-6"><h2 class="text-2xl font-semibold text-gray-800 mb-3">🔍 Évaluation</h2><p class="text-gray-700">Profil complet des forces et défis.</p></div>
+          <div class="border-l-4 border-pink-600 pl-6"><h2 class="text-2xl font-semibold text-gray-800 mb-3">📋 Plan individuel</h2><p class="text-gray-700">Objectifs clairs et mesurables.</p></div>
+          <div class="border-l-4 border-amber-600 pl-6"><h2 class="text-2xl font-semibold text-gray-800 mb-3">🎮 Ludique</h2><p class="text-gray-700">Engagement et plaisir d’apprendre.</p></div>
+          <div class="border-l-4 border-stone-600 pl-6"><h2 class="text-2xl font-semibold text-gray-800 mb-3">📊 Suivi</h2><p class="text-gray-700">Ajustements réguliers selon progrès.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Approche -->
+    <section id="approche" class="section-content fade-out hidden">
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">Approche</h1>
+          <div class="w-24 h-1 bg-emerald-600 mx-auto"></div>
+          <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Une démarche claire, bienveillante et structurée pour des progrès visibles et durables.</p>
+        </div>
+        <div class="grid md:grid-cols-5 gap-6">
+          <div class="bg-emerald-50 p-5 rounded-xl border-l-4 border-emerald-500 card-hover"><div class="text-2xl mb-2">🗣️</div><h3 class="font-semibold text-gray-800 mb-1">1. Rencontre</h3><p class="text-gray-600 text-sm">Écoute des besoins.</p></div>
+          <div class="bg-pink-50 p-5 rounded-xl border-l-4 border-pink-500 card-hover"><div class="text-2xl mb-2">🔎</div><h3 class="font-semibold text-gray-800 mb-1">2. Évaluation</h3><p class="text-gray-600 text-sm">Bilan précis.</p></div>
+          <div class="bg-amber-50 p-5 rounded-xl border-l-4 border-amber-600 card-hover"><div class="text-2xl mb-2">🧭</div><h3 class="font-semibold text-gray-800 mb-1">3. Objectifs</h3><p class="text-gray-600 text-sm">Cibles claires.</p></div>
+          <div class="bg-indigo-50 p-5 rounded-xl border-l-4 border-indigo-500 card-hover"><div class="text-2xl mb-2">🧩</div><h3 class="font-semibold text-gray-800 mb-1">4. Interventions</h3><p class="text-gray-600 text-sm">Séances adaptées.</p></div>
+          <div class="bg-stone-50 p-5 rounded-xl border-l-4 border-stone-600 card-hover"><div class="text-2xl mb-2">📈</div><h3 class="font-semibold text-gray-800 mb-1">5. Suivi</h3><p class="text-gray-600 text-sm">Ajustements réguliers.</p></div>
+        </div>
+        <div class="mt-8 bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-xl p-6">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div><h3 class="text-xl font-semibold text-gray-800">Transparence & collaboration</h3><p class="text-gray-600">Chaque étape est expliquée. Vous savez comment on avance.</p></div>
+            <button onclick="showSection('contact')" class="smooth px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white">Parler de votre besoin ➜</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compétences -->
+    <section id="skills" class="section-content fade-out hidden">
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">Compétences clés</h1>
+          <div class="w-24 h-1 bg-rose-600 mx-auto"></div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div><h2 class="text-2xl font-semibold text-gray-800 mb-6">Technique</h2>
+            <div class="space-y-4">
+              <div class="bg-emerald-50 p-4 rounded-lg border-l-4 border-emerald-500"><h3 class="font-semibold text-gray-800 mb-2">Évaluation</h3><p class="text-gray-600 text-sm">Diagnostic approfondi</p></div>
+              <div class="bg-pink-50 p-4 rounded-lg border-l-4 border-pink-500"><h3 class="font-semibold text-gray-800 mb-2">Intervention</h3><p class="text-gray-600 text-sm">Stratégies ciblées</p></div>
+            </div>
+          </div>
+          <div><h2 class="text-2xl font-semibold text-gray-800 mb-6">Relationnel</h2>
+            <div class="space-y-4">
+              <div class="bg-emerald-50 p-4 rounded-lg border-l-4 border-emerald-500"><h3 class="font-semibold text-gray-800 mb-2">Communication</h3><p class="text-gray-600 text-sm">Confiance et écoute</p></div>
+              <div class="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-600"><h3 class="font-semibold text-gray-800 mb-2">Patience</h3><p class="text-gray-600 text-sm">Respect du rythme</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tarifs -->
+    <section id="tarifs" class="section-content fade-out hidden">
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8 card-hover">
+        <div class="text-center mb-8">
+          <div class="w-32 h-32 bg-blue-100 rounded-full mx-auto mb-6 flex items-center justify-center text-6xl">💳</div>
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">Tarifs</h1>
+          <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-lg border-l-4 border-blue-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">📋</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Bilan complet</h3><div class="text-3xl font-bold text-blue-600 mb-2">350€</div><p class="text-sm text-gray-700">Évaluation + rapport + recommandations</p></div></div>
+          <div class="bg-gradient-to-br from-emerald-50 to-green-100 p-6 rounded-lg border-l-4 border-emerald-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">👤</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Séance</h3><div class="text-3xl font-bold text-emerald-600 mb-2">45€</div><p class="text-sm text-gray-700">1h — suivi personnalisé</p></div></div>
+          <div class="bg-gradient-to-br from-amber-50 to-orange-100 p-6 rounded-lg border-l-4 border-amber-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">📅</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Forfait</h3><div class="text-2xl font-bold text-amber-600 mb-2">Sur devis</div><p class="text-sm text-gray-700">Accompagnement long</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section-content fade-out hidden">
+      <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-gray-800 mb-4">Contact</h1>
+          <div class="w-24 h-1 bg-gray-800 mx-auto"></div>
+        </div>
+        <div class="max-w-3xl mx-auto space-y-8">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="flex items-center justify-center">
+              <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mr-6"><span class="text-emerald-600 text-2xl">📞</span></div>
+              <div class="text-center md:text-left"><p class="font-semibold text-gray-800 text-lg">Téléphone</p><p class="text-gray-700 text-lg">07 82 30 90 01</p></div>
+            </div>
+            <div class="flex items-center justify-center">
+              <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mr-6"><span class="text-pink-600 text-2xl">✉️</span></div>
+              <div class="text-center md:text-left"><p class="font-semibold text-gray-800 text-lg">Email</p><p class="text-gray-700 text-lg">heloise.martin@hotmail.com</p></div>
+            </div>
+          </div>
+
+          <!-- Carte cliquable -->
+          <div class="relative overflow-hidden rounded-2xl shadow-xl">
+            <a id="mapLink" href="#" target="_blank" rel="noopener" class="block group">
+              <div class="relative h-72 bg-gradient-to-br from-sky-200 via-blue-200 to-indigo-200">
+                <svg viewBox="0 0 800 400" class="absolute inset-0 w-full h-full">
+                  <defs><linearGradient id="road" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.85"/><stop offset="100%" stop-color="#6366f1" stop-opacity="0.85"/></linearGradient></defs>
+                  <path d="M20,360 C180,300 300,280 420,260 C560,240 640,200 780,160" stroke="url(#road)" stroke-width="10" fill="none" stroke-linecap="round" opacity=".8"/>
+                  <path d="M40,60 C220,120 380,140 520,160 C640,180 700,220 760,300" stroke="white" stroke-opacity=".35" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="6 10"/>
+                  <rect x="120" y="100" width="160" height="120" fill="rgba(255,255,255,.25)" rx="14"></rect>
+                  <rect x="520" y="220" width="180" height="120" fill="rgba(255,255,255,.2)" rx="14"></rect>
+                  <g transform="translate(600,240)"><circle r="10" fill="#ef4444"></circle><circle r="22" fill="rgba(239,68,68,.25)"></circle><text x="16" y="6" font-size="16" fill="#0f172a" font-weight="700">864 La Garenne des Cartes</text></g>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center text-white font-bold tracking-wide bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200">Cliquez pour l’itinéraire ➜</div>
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* Menu mobile */
+    const menuToggle=document.getElementById('menuToggle');
+    const closeMenuBtn=document.getElementById('closeMenu');
+    const mobileMenu=document.getElementById('mobileMenu');
+    const overlay=document.getElementById('overlay');
+    function openMobileMenu(){mobileMenu.classList.remove('menu-closed');mobileMenu.classList.add('menu-open');overlay.classList.remove('hidden')}
+    function closeMobileMenu(){mobileMenu.classList.remove('menu-open');mobileMenu.classList.add('menu-closed');overlay.classList.add('hidden')}
+    if(menuToggle)menuToggle.addEventListener('click',openMobileMenu);
+    if(closeMenuBtn)closeMenuBtn.addEventListener('click',closeMobileMenu);
+
+    /* Navigation sections */
+    function showSection(id){
+      const sections=document.querySelectorAll('.section-content');
+      sections.forEach(s=>{s.classList.add('fade-out','hidden');s.classList.remove('fade-in')});
+      setTimeout(()=>{const t=document.getElementById(id); if(t){t.classList.remove('hidden','fade-out');t.classList.add('fade-in')}} ,150);
+    }
+    document.addEventListener('DOMContentLoaded',()=>{showSection('about')});
+
+    /* Fond: toggles + interactions souris */
+    const layerGrad=document.getElementById('layer-grad');
+    const layerBlobs=document.getElementById('layer-blobs');
+    const layerMesh=document.getElementById('layer-mesh');
+    const halo=document.getElementById('cursorHalo');
+    const btnGradient=document.getElementById('btnGradient');
+    const btnBlobs=document.getElementById('btnBlobs');
+    const btnMesh=document.getElementById('btnMesh');
+    const btnShuffle=document.getElementById('btnShuffle');
+    const state={grad:true,blobs:true,mesh:true};
+    function syncButtons(){btnGradient.classList.toggle('toggle-active',state.grad);btnBlobs.classList.toggle('toggle-active',state.blobs);btnMesh.classList.toggle('toggle-active',state.mesh)}
+    function setVisibility(){layerGrad.style.display=state.grad?'block':'none';layerBlobs.style.display=state.blobs?'block':'none';layerMesh.style.display=state.mesh?'block':'none';syncButtons()}
+    if(btnGradient)btnGradient.addEventListener('click',()=>{state.grad=!state.grad;setVisibility()});
+    if(btnBlobs)btnBlobs.addEventListener('click',()=>{state.blobs=!state.blobs;setVisibility()});
+    if(btnMesh)btnMesh.addEventListener('click',()=>{state.mesh=!state.mesh;setVisibility()});
+    if(btnShuffle)btnShuffle.addEventListener('click',()=>{
+      const palettes=[['#22c55e','#06b6d4','#f59e0b'],['#ef4444','#a855f7','#22d3ee'],['#84cc16','#f97316','#38bdf8'],['#e879f9','#34d399','#60a5fa'],['#f43f5e','#f59e0b','#10b981']];
+      const p=palettes[Math.floor(Math.random()*palettes.length)];
+      const a=document.getElementById('gradientA'), b=document.getElementById('gradientB');
+      a.style.background=`conic-gradient(at 20% 10%, ${p[0]} 0deg, ${p[1]} 140deg, ${p[2]} 280deg, ${p[0]} 360deg)`;
+      b.style.background=`radial-gradient(circle at 80% 20%, ${hexToRgba(p[1], .4)}, transparent 40%), radial-gradient(circle at 10% 90%, ${hexToRgba(p[0], .35)}, transparent 35%)`;
+      flash(btnShuffle);
+    });
+    function hexToRgba(hex,a){const c=hex.replace('#','');const n=parseInt(c,16);const r=(n>>16)&255,g=(n>>8)&255,b=n&255;return`rgba(${r},${g},${b},${a})`}
+    function flash(el){el.classList.add('ring-4','ring-white/40');setTimeout(()=>el.classList.remove('ring-4','ring-white/40'),250)}
+
+    let lastX=0,lastY=0,lastTime=performance.now();
+    window.addEventListener('mousemove',e=>{
+      const x=e.clientX,y=e.clientY;halo.style.setProperty('--mx',x+'px');halo.style.setProperty('--my',y+'px');
+      const now=performance.now(),dt=Math.max(1,now-lastTime);const vx=(x-lastX)/dt,vy=(y-lastY)/dt,speed=Math.min(1,Math.hypot(vx,vy)*20);
+      halo.style.setProperty('--haloAlpha',(0.2+speed*0.25).toFixed(3));
+      if(speed>0.25){halo.classList.add('cursor-flash');clearTimeout(halo._to);halo._to=setTimeout(()=>halo.classList.remove('cursor-flash'),120)}
+      const w=innerWidth,h=innerHeight,dx=(x-w/2)/(w/2),dy=(y-h/2)/(h/2);
+      const mesh=document.getElementById('meshContainer'); if(mesh) mesh.style.transform=`translate(${-12+dx*10}%, ${-12+dy*10}%)`;
+      const b1=document.getElementById('blob1'),b2=document.getElementById('blob2'),b3=document.getElementById('blob3');
+      if(b1)b1.style.transform=`translate(${dx*20}px,${dy*16}px)`; if(b2)b2.style.transform=`translate(${dx*-18}px,${dy*-14}px)`; if(b3)b3.style.transform=`translate(${dx*14}px,${dy*-10}px)`;
+      const g1=document.getElementById('g1'),g2=document.getElementById('g2'),g3=document.getElementById('g3');
+      if(g1)g1.style.transform=`translate(${dx*10}px,${dy*6}px)`; if(g2)g2.style.transform=`translate(${dx*-8}px,${dy*10}px)`; if(g3)g3.style.transform=`translate(${dx*6}px,${dy*-8}px)`;
+      lastX=x;lastY=y;lastTime=now;
+    });
+
+    /* Intro ultra simple et fiable (typage + gomme) */
+    const intro=document.getElementById('intro');
+    const logoBadge=document.getElementById('logoBadge');
+    const typedText=document.getElementById('typedText');
+    const eraser=document.getElementById('eraser');
+    const wrong="Dishelp"; // faute
+    const right="DysHelp"; // correct
+
+    function typeText(text,speed,cb){
+      let i=0; const it=setInterval(()=>{typedText.textContent=text.slice(0,++i); if(i>=text.length){clearInterval(it); cb&&setTimeout(cb,250)}}, speed);
+    }
+    function backspace(count,speed,cb){
+      let i=0; const it=setInterval(()=>{typedText.textContent=typedText.textContent.slice(0,-1); if(++i>=count){clearInterval(it); cb&&setTimeout(cb,150)}}, speed);
+    }
+
+    window.addEventListener('load',()=>{
+      // Petit logo puis écriture
+      setTimeout(()=>{
+        logoBadge.classList.add('logo-hide');
+        setTimeout(()=>{
+          typeText(wrong,90,()=>{
+            const idx=wrong.indexOf('i');
+            if(idx>=0){
+              eraser.style.display='flex';
+              // recule jusqu'à la lettre fautive incluse
+              backspace(wrong.length-idx,80,()=>{
+                typeText(right.slice(idx),85,()=>{
+                  eraser.style.display='none';
+                  setTimeout(()=>{intro.classList.add('intro-exit'); setTimeout(()=>intro.style.display='none',800)},400);
+                });
+              });
+            }else{
+              setTimeout(()=>{intro.classList.add('intro-exit'); setTimeout(()=>intro.style.display='none',800)},500);
+            }
+          });
+        },300);
+      },900);
+    });
+
+    /* Carte: lien itinéraire */
+    const mapLink=document.getElementById('mapLink');
+    const address=encodeURIComponent('864 La Garenne des Cartes');
+    function mapsURL(){const isApple=/iPad|iPhone|Macintosh/.test(navigator.userAgent);return isApple?`https://maps.apple.com/?q=${address}`:`https://www.google.com/maps/search/?api=1&query=${address}`}
+    if(mapLink) mapLink.setAttribute('href',mapsURL());
+
+    /* Init fond */
+    setVisibility();
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97e895f473edf0cb',t:'MTc1Nzc3NjM3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
