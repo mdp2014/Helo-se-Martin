@@ -7,17 +7,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { font-family: 'Comic Sans MS', cursive, sans-serif !important; }
-
     /* Utilitaires et transitions */
     .smooth{transition:all .6s cubic-bezier(.2,.8,.2,1)}
-    .menu-open{transform:translateX(0)}
-    .menu-closed{transform:translateX(-100%)}
     .fade-in{opacity:1;transform:translateY(0)}
     .fade-out{opacity:0;transform:translateY(20px)}
     .section-content{transition:opacity .3s ease, transform .3s ease}
     .card-hover{transition:all .3s ease}
     .card-hover:hover{transform:translateY(-5px);box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04)}
-
     /* Fond animé */
     @keyframes gradientShift{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-6%,-4%,0) scale(1.06)}100%{transform:translate3d(0,0,0) scale(1)}}
     .animate-gradient{animation:gradientShift 18s ease-in-out infinite}
@@ -31,7 +27,6 @@
     .toggle-active{background:rgba(255,255,255,.9);color:#111827;border-color:rgba(255,255,255,.9)}
     .cursor-halo{position:fixed;inset:0;pointer-events:none;background:radial-gradient(460px 300px at var(--mx,50%) var(--my,50%), rgba(255,255,255,var(--haloAlpha,.22)), transparent 60%);transition:background .12s ease;z-index:2}
     .cursor-flash{background:radial-gradient(560px 360px at var(--mx,50%) var(--my,50%), rgba(255,255,255,.25), transparent 65%)}
-
     /* INTRO (simple et fiable) */
     .intro-wrap{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%, #0f172a, #020617 60%);overflow:hidden}
     .intro-stage{position:relative;width:min(92vw,780px);height:min(50vw,380px)}
@@ -42,12 +37,10 @@
       box-shadow:0 20px 60px rgba(0,0,0,.35);animation:logoPop 1.4s ease-in-out infinite}
     @keyframes logoPop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.04)}}
     .logo-hide{opacity:0;transform:scale(.9);pointer-events:none}
-
     .write-wrap{position:absolute;inset:0;display:grid;place-items:center}
     .write-line{font-size:clamp(36px,6vw,80px);color:#fff;font-weight:900;letter-spacing:.5px;text-shadow:0 12px 30px rgba(0,0,0,.35);white-space:nowrap}
     .caret{display:inline-block;width:.08em;height:.9em;background:#fff;vertical-align:-0.05em;margin-left:.04em;border-radius:2px;animation:blink 1s steps(1,end) infinite}
     @keyframes blink{0%,60%{opacity:1}61%,100%{opacity:0}}
-
     .eraser{position:absolute;top:50%;transform:translateY(-50%);left:60%;width:58px;height:40px;border-radius:8px;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,#fda4af,#fb7185);box-shadow:0 14px 40px rgba(251,113,133,.35)}
     .eraser::after{content:"";width:65%;height:40%;border-radius:6px;background:linear-gradient(135deg,#fef3c7,#fde68a);transform:rotate(-12deg)}
     .intro-exit{animation:introExit .8s cubic-bezier(.2,.85,.2,1) forwards}
@@ -67,7 +60,6 @@
       </div>
     </div>
   </div>
-
   <!-- FOND stylé -->
   <div id="bg-root" class="fixed inset-0 -z-10 overflow-hidden">
     <div id="layer-grad" class="absolute inset-0 animate-gradient will-change-transform">
@@ -86,7 +78,8 @@
       <div id="meshContainer" class="grid grid-cols-10 gap-8 w-[1400px] max-w-none pointer-events-none smooth" style="transform:translate(-12%,-12%)">
         <div class="contents">
           <!-- 100 points (10x10) -->
-          <!-- 10 lignes de 10 points -->
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
+          <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
           <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
           <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
           <span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span><span class="mesh-dot w-2 h-2 rounded-full bg-white/35"></span>
@@ -103,7 +96,6 @@
     <div class="absolute inset-0 vignette"></div>
     <div id="cursorHalo" class="cursor-halo"></div>
   </div>
-
   <!-- Contrôles fond -->
   <div class="fixed top-4 right-4 z-20 flex items-center gap-2">
     <button id="btnGradient" class="smooth px-3 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 text-white">Gradient</button>
@@ -111,7 +103,6 @@
     <button id="btnMesh" class="smooth px-3 py-2 rounded-lg border border-white/20 bg-white/10 hover:bg-white/20 text-white">Mesh</button>
     <button id="btnShuffle" class="smooth px-3 py-2 rounded-lg border border-white/20 bg-emerald-500/80 hover:bg-emerald-500 text-white">Couleurs</button>
   </div>
-
   <!-- Header -->
   <header class="bg-white/80 backdrop-blur shadow-lg sticky top-0 z-30">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -133,9 +124,8 @@
       </div>
     </div>
   </header>
-
-  <!-- Menu mobile (OUVERT par défaut sur mobile) -->
-  <div id="mobileMenu" class="fixed inset-y-0 left-0 z-[60] w-64 bg-white/90 backdrop-blur shadow-xl transform menu-open transition-transform duration-300 ease-in-out lg:hidden">
+  <!-- Menu mobile -->
+  <div id="mobileMenu" class="fixed inset-y-0 left-0 z-[60] w-64 bg-white/90 backdrop-blur shadow-xl transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden">
     <div class="flex items-center justify-between p-4 border-b">
       <span class="text-xl font-semibold text-emerald-600">☰ Menu</span>
       <button id="closeMenu" class="p-2 rounded-md text-gray-700 hover:text-emerald-600 hover:bg-gray-100" aria-label="Fermer le menu">
@@ -153,9 +143,8 @@
       <button onclick="showSection('contact'); closeMobileMenu()" class="w-full text-left px-4 py-3 text-gray-800 hover:bg-gray-50 hover:text-gray-900">Contact</button>
     </nav>
   </div>
-  <!-- Voile (VISIBLE par défaut sur mobile) -->
-  <div id="overlay" class="fixed inset-0 bg-black/40 z-[55] lg:hidden"></div>
-
+  <!-- Voile -->
+  <div id="overlay" class="fixed inset-0 bg-black/40 z-[55] lg:hidden hidden"></div>
   <!-- Contenu -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
     <!-- À propos -->
@@ -184,7 +173,6 @@
         </div>
       </div>
     </section>
-
     <!-- Orthopédagogie -->
     <section id="orthopedagogie" class="section-content fade-out hidden">
       <div class="bg-white rounded-xl shadow-lg p-8 mb-8 card-hover">
@@ -225,7 +213,6 @@
         </div>
       </div>
     </section>
-
     <!-- Services -->
     <section id="services" class="section-content fade-out hidden">
       <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
@@ -267,7 +254,6 @@
         </div>
       </div>
     </section>
-
     <!-- Méthodes -->
     <section id="methods" class="section-content fade-out hidden">
       <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
@@ -283,7 +269,6 @@
         </div>
       </div>
     </section>
-
     <!-- Approche -->
     <section id="approche" class="section-content fade-out hidden">
       <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
@@ -307,7 +292,6 @@
         </div>
       </div>
     </section>
-
     <!-- Compétences -->
     <section id="skills" class="section-content fade-out hidden">
       <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
@@ -331,7 +315,6 @@
         </div>
       </div>
     </section>
-
     <!-- Tarifs -->
     <section id="tarifs" class="section-content fade-out hidden">
       <div class="bg-white rounded-xl shadow-lg p-8 mb-8 card-hover">
@@ -341,13 +324,12 @@
           <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-lg border-l-4 border-blue-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">📋</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Bilan complet</h3><div class="text-3xl font-bold text-blue-600 mb-2">350€</div><p class="text-sm text-gray-700">Évaluation + rapport + recommandations</p></div></div>
-          <div class="bg-gradient-to-br from-emerald-50 to-green-100 p-6 rounded-lg border-l-4 border-emerald-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">👤</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Séance</h3><div class="text-3xl font-bold text-emerald-600 mb-2">45€</div><p class="text-sm text-gray-700">1h — suivi personnalisé</p></div></div>
-          <div class="bg-gradient-to-br from-amber-50 to-orange-100 p-6 rounded-lg border-l-4 border-amber-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">📅</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Forfait</h3><div class="text-2xl font-bold text-amber-600 mb-2">Sur devis</div><p class="text-sm text-gray-700">Accompagnement long</p></div></div>
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-lg border-l-4 border-blue-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">📋</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Bilan complet</h3><div class="text-3xl font-bold text-blue-600 mb-2">350€</div><p class="text-sm text-gray-700">Évaluation + rapport + recommandations</p></div>
+          <div class="bg-gradient-to-br from-emerald-50 to-green-100 p-6 rounded-lg border-l-4 border-emerald-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">👤</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Séance</h3><div class="text-3xl font-bold text-emerald-600 mb-2">45€</div><p class="text-sm text-gray-700">1h — suivi personnalisé</p></div>
+          <div class="bg-gradient-to-br from-amber-50 to-orange-100 p-6 rounded-lg border-l-4 border-amber-500 card-hover"><div class="text-center"><div class="text-4xl mb-4">📅</div><h3 class="text-xl font-semibold text-gray-800 mb-3">Forfait</h3><div class="text-2xl font-bold text-amber-600 mb-2">Sur devis</div><p class="text-sm text-gray-700">Accompagnement long</p></div>
         </div>
       </div>
     </section>
-
     <!-- Contact -->
     <section id="contact" class="section-content fade-out hidden">
       <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
@@ -366,7 +348,6 @@
               <div class="text-center md:text-left"><p class="font-semibold text-gray-800 text-lg">Email</p><p class="text-gray-700 text-lg">heloise.martin@hotmail.com</p></div>
             </div>
           </div>
-
           <!-- Carte cliquable -->
           <div class="relative overflow-hidden rounded-2xl shadow-xl">
             <a id="mapLink" href="#" target="_blank" rel="noopener" class="block group">
@@ -383,143 +364,264 @@
               </div>
             </a>
           </div>
-
         </div>
       </div>
     </section>
   </main>
-
   <script>
     /* Menu mobile */
-    const menuToggle=document.getElementById('menuToggle');
-    const closeMenuBtn=document.getElementById('closeMenu') || document.querySelector('#closeMenu');
-    const mobileMenu=document.getElementById('mobileMenu');
-    const overlay=document.getElementById('overlay');
-    const intro=document.getElementById('intro');
+    const menuToggle = document.getElementById('menuToggle');
+    const closeMenuBtn = document.getElementById('closeMenu');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('overlay');
+    const intro = document.getElementById('intro');
 
-    function openMobileMenu(){
-      // S'assure que l'intro ne bloque pas sur mobile
+    function openMobileMenu() {
       if (intro && window.matchMedia('(max-width: 1024px)').matches) {
-        intro.style.display='none';
+        intro.style.display = 'none';
       }
-      mobileMenu.classList.remove('menu-closed'); mobileMenu.classList.add('menu-open');
+      mobileMenu.classList.remove('-translate-x-full');
+      mobileMenu.classList.add('translate-x-0');
       overlay.classList.remove('hidden');
     }
-    function closeMobileMenu(){
-      mobileMenu.classList.remove('menu-open'); mobileMenu.classList.add('menu-closed');
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('translate-x-0');
+      mobileMenu.classList.add('-translate-x-full');
       overlay.classList.add('hidden');
     }
 
-    // Ouvre/ferme via boutons et voile
-    if(menuToggle) menuToggle.addEventListener('click', ()=> {
-      if (mobileMenu.classList.contains('menu-open')) { closeMobileMenu(); } else { openMobileMenu(); }
-    });
-    if(closeMenuBtn) closeMenuBtn.addEventListener('click', closeMobileMenu);
-    if(overlay){
-  overlay.addEventListener('click', closeMobileMenu);
-  overlay.addEventListener('touchstart', (e)=>{ e.preventDefault(); closeMobileMenu(); }, {passive:false});
-}
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        if (mobileMenu.classList.contains('translate-x-0')) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+      });
+    }
 
-    // À l'arrivée sur mobile: menu ouvert + intro masquée, overlay visible
-    document.addEventListener('DOMContentLoaded', ()=>{
+    if (closeMenuBtn) {
+      closeMenuBtn.addEventListener('click', closeMobileMenu);
+    }
+
+    if (overlay) {
+      overlay.addEventListener('click', closeMobileMenu);
+      overlay.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        closeMobileMenu();
+      }, { passive: false });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
       if (window.matchMedia('(max-width: 1024px)').matches) {
         openMobileMenu();
       }
     });
 
     /* Navigation sections */
-    function showSection(id){
-      const sections=document.querySelectorAll('.section-content');
-      sections.forEach(s=>{s.classList.add('fade-out','hidden');s.classList.remove('fade-in')});
-      setTimeout(()=>{const t=document.getElementById(id); if(t){t.classList.remove('hidden','fade-out');t.classList.add('fade-in')}} ,150);
+    function showSection(id) {
+      const sections = document.querySelectorAll('.section-content');
+      sections.forEach(s => {
+        s.classList.add('fade-out', 'hidden');
+        s.classList.remove('fade-in');
+      });
+      setTimeout(() => {
+        const target = document.getElementById(id);
+        if (target) {
+          target.classList.remove('hidden', 'fade-out');
+          target.classList.add('fade-in');
+        }
+      }, 150);
+      closeMobileMenu();
     }
-    document.addEventListener('DOMContentLoaded',()=>{showSection('about')});
+
+    document.addEventListener('DOMContentLoaded', () => {
+      showSection('about');
+    });
 
     /* Fond: toggles + interactions */
-    const layerGrad=document.getElementById('layer-grad');
-    const layerBlobs=document.getElementById('layer-blobs');
-    const layerMesh=document.getElementById('layer-mesh');
-    const halo=document.getElementById('cursorHalo');
-    const btnGradient=document.getElementById('btnGradient');
-    const btnBlobs=document.getElementById('btnBlobs');
-    const btnMesh=document.getElementById('btnMesh');
-    const btnShuffle=document.getElementById('btnShuffle');
-    const state={grad:true,blobs:true,mesh:true};
-    function syncButtons(){btnGradient.classList.toggle('toggle-active',state.grad);btnBlobs.classList.toggle('toggle-active',state.blobs);btnMesh.classList.toggle('toggle-active',state.mesh)}
-    function setVisibility(){layerGrad.style.display=state.grad?'block':'none';layerBlobs.style.display=state.blobs?'block':'none';layerMesh.style.display=state.mesh?'block':'none';syncButtons()}
-    if(btnGradient)btnGradient.addEventListener('click',()=>{state.grad=!state.grad;setVisibility()});
-    if(btnBlobs)btnBlobs.addEventListener('click',()=>{state.blobs=!state.blobs;setVisibility()});
-    if(btnMesh)btnMesh.addEventListener('click',()=>{state.mesh=!state.mesh;setVisibility()});
-    if(btnShuffle)btnShuffle.addEventListener('click',()=>{
-      const palettes=[['#22c55e','#06b6d4','#f59e0b'],['#ef4444','#a855f7','#22d3ee'],['#84cc16','#f97316','#38bdf8'],['#e879f9','#34d399','#60a5fa'],['#f43f5e','#f59e0b','#10b981']];
-      const p=palettes[Math.floor(Math.random()*palettes.length)];
-      const a=document.getElementById('gradientA'), b=document.getElementById('gradientB');
-      a.style.background=`conic-gradient(at 20% 10%, ${p[0]} 0deg, ${p[1]} 140deg, ${p[2]} 280deg, ${p[0]} 360deg)`;
-      b.style.background=`radial-gradient(circle at 80% 20%, ${hexToRgba(p[1], .4)}, transparent 40%), radial-gradient(circle at 10% 90%, ${hexToRgba(p[0], .35)}, transparent 35%)`;
-      flash(btnShuffle);
-    });
-    function hexToRgba(hex,a){const c=hex.replace('#','');const n=parseInt(c,16);const r=(n>>16)&255,g=(n>>8)&255,b=n&255;return`rgba(${r},${g},${b},${a})`}
-    function flash(el){el.classList.add('ring-4','ring-white/40');setTimeout(()=>el.classList.remove('ring-4','ring-white/40'),250)}
+    const layerGrad = document.getElementById('layer-grad');
+    const layerBlobs = document.getElementById('layer-blobs');
+    const layerMesh = document.getElementById('layer-mesh');
+    const halo = document.getElementById('cursorHalo');
+    const btnGradient = document.getElementById('btnGradient');
+    const btnBlobs = document.getElementById('btnBlobs');
+    const btnMesh = document.getElementById('btnMesh');
+    const btnShuffle = document.getElementById('btnShuffle');
+    const state = { grad: true, blobs: true, mesh: true };
+
+    function syncButtons() {
+      btnGradient.classList.toggle('toggle-active', state.grad);
+      btnBlobs.classList.toggle('toggle-active', state.blobs);
+      btnMesh.classList.toggle('toggle-active', state.mesh);
+    }
+
+    function setVisibility() {
+      layerGrad.style.display = state.grad ? 'block' : 'none';
+      layerBlobs.style.display = state.blobs ? 'block' : 'none';
+      layerMesh.style.display = state.mesh ? 'block' : 'none';
+      syncButtons();
+    }
+
+    if (btnGradient) {
+      btnGradient.addEventListener('click', () => {
+        state.grad = !state.grad;
+        setVisibility();
+      });
+    }
+
+    if (btnBlobs) {
+      btnBlobs.addEventListener('click', () => {
+        state.blobs = !state.blobs;
+        setVisibility();
+      });
+    }
+
+    if (btnMesh) {
+      btnMesh.addEventListener('click', () => {
+        state.mesh = !state.mesh;
+        setVisibility();
+      });
+    }
+
+    if (btnShuffle) {
+      btnShuffle.addEventListener('click', () => {
+        const palettes = [
+          ['#22c55e', '#06b6d4', '#f59e0b'],
+          ['#ef4444', '#a855f7', '#22d3ee'],
+          ['#84cc16', '#f97316', '#38bdf8'],
+          ['#e879f9', '#34d399', '#60a5fa'],
+          ['#f43f5e', '#f59e0b', '#10b981']
+        ];
+        const p = palettes[Math.floor(Math.random() * palettes.length)];
+        const a = document.getElementById('gradientA');
+        const b = document.getElementById('gradientB');
+        a.style.background = `conic-gradient(at 20% 10%, ${p[0]} 0deg, ${p[1]} 140deg, ${p[2]} 280deg, ${p[0]} 360deg)`;
+        b.style.background = `radial-gradient(circle at 80% 20%, ${hexToRgba(p[1], 0.4)}, transparent 40%), radial-gradient(circle at 10% 90%, ${hexToRgba(p[0], 0.35)}, transparent 35%)`;
+        flash(btnShuffle);
+      });
+    }
+
+    function hexToRgba(hex, a) {
+      const c = hex.replace('#', '');
+      const n = parseInt(c, 16);
+      const r = (n >> 16) & 255;
+      const g = (n >> 8) & 255;
+      const b = n & 255;
+      return `rgba(${r},${g},${b},${a})`;
+    }
+
+    function flash(el) {
+      el.classList.add('ring-4', 'ring-white/40');
+      setTimeout(() => el.classList.remove('ring-4', 'ring-white/40'), 250);
+    }
 
     // Parallax + halo
-    let lastX=0,lastY=0,lastTime=performance.now();
-    window.addEventListener('mousemove',e=>{
-      const x=e.clientX,y=e.clientY; if(!halo) return;
-      halo.style.setProperty('--mx',x+'px');halo.style.setProperty('--my',y+'px');
-      const now=performance.now(),dt=Math.max(1,now-lastTime);const vx=(x-lastX)/dt,vy=(y-lastY)/dt,speed=Math.min(1,Math.hypot(vx,vy)*20);
-      halo.style.setProperty('--haloAlpha',(0.2+speed*0.25).toFixed(3));
-      if(speed>0.25){halo.classList.add('cursor-flash');clearTimeout(halo._to);halo._to=setTimeout(()=>halo.classList.remove('cursor-flash'),120)}
-      const w=innerWidth,h=innerHeight,dx=(x-w/2)/(w/2),dy=(y-h/2)/(h/2);
-      const mesh=document.getElementById('meshContainer'); if(mesh) mesh.style.transform=`translate(${-12+dx*10}%, ${-12+dy*10}%)`;
-      const b1=document.getElementById('blob1'),b2=document.getElementById('blob2'),b3=document.getElementById('blob3');
-      if(b1)b1.style.transform=`translate(${dx*20}px,${dy*16}px)`; if(b2)b2.style.transform=`translate(${dx*-18}px,${dy*-14}px)`; if(b3)b3.style.transform=`translate(${dx*14}px,${dy*-10}px)`;
-      const g1=document.getElementById('g1'),g2=document.getElementById('g2'),g3=document.getElementById('g3');
-      if(g1)g1.style.transform=`translate(${dx*10}px,${dy*6}px)`; if(g2)g2.style.transform=`translate(${dx*-8}px,${dy*10}px)`; if(g3)g3.style.transform=`translate(${dx*6}px,${dy*-8}px)`;
-      lastX=x;lastY=y;lastTime=now;
+    let lastX = 0, lastY = 0, lastTime = performance.now();
+    window.addEventListener('mousemove', e => {
+      const x = e.clientX, y = e.clientY;
+      if (!halo) return;
+      halo.style.setProperty('--mx', x + 'px');
+      halo.style.setProperty('--my', y + 'px');
+      const now = performance.now(), dt = Math.max(1, now - lastTime);
+      const vx = (x - lastX) / dt, vy = (y - lastY) / dt, speed = Math.min(1, Math.hypot(vx, vy) * 20);
+      halo.style.setProperty('--haloAlpha', (0.2 + speed * 0.25).toFixed(3));
+      if (speed > 0.25) {
+        halo.classList.add('cursor-flash');
+        clearTimeout(halo._to);
+        halo._to = setTimeout(() => halo.classList.remove('cursor-flash'), 120);
+      }
+      const w = innerWidth, h = innerHeight, dx = (x - w / 2) / (w / 2), dy = (y - h / 2) / (h / 2);
+      const mesh = document.getElementById('meshContainer');
+      if (mesh) mesh.style.transform = `translate(${-12 + dx * 10}%, ${-12 + dy * 10}%)`;
+      const b1 = document.getElementById('blob1'), b2 = document.getElementById('blob2'), b3 = document.getElementById('blob3');
+      if (b1) b1.style.transform = `translate(${dx * 20}px,${dy * 16}px)`;
+      if (b2) b2.style.transform = `translate(${dx * -18}px,${dy * -14}px)`;
+      if (b3) b3.style.transform = `translate(${dx * 14}px,${dy * -10}px)`;
+      const g1 = document.getElementById('g1'), g2 = document.getElementById('g2'), g3 = document.getElementById('g3');
+      if (g1) g1.style.transform = `translate(${dx * 10}px,${dy * 6}px)`;
+      if (g2) g2.style.transform = `translate(${dx * -8}px,${dy * 10}px)`;
+      if (g3) g3.style.transform = `translate(${dx * 6}px,${dy * -8}px)`;
+      lastX = x; lastY = y; lastTime = now;
     });
 
     /* INTRO: écriture fautive -> gomme -> correction, mais on la masque d’office sur mobile pour ne pas bloquer le menu */
-    const logoBadge=document.getElementById('logoBadge');
-    const typedText=document.getElementById('typedText');
-    const eraser=document.getElementById('eraser');
-    const wrong="Dishelp"; const right="DysHelp";
-    function typeText(text,speed,cb){let i=0;const it=setInterval(()=>{typedText.textContent=text.slice(0,++i);if(i>=text.length){clearInterval(it);cb&&setTimeout(cb,250)}},speed)}
-    function backspace(count,speed,cb){let i=0;const it=setInterval(()=>{typedText.textContent=typedText.textContent.slice(0,-1);if(++i>=count){clearInterval(it);cb&&setTimeout(cb,150)}},speed)}
-    window.addEventListener('load',()=>{
+    const logoBadge = document.getElementById('logoBadge');
+    const typedText = document.getElementById('typedText');
+    const eraser = document.getElementById('eraser');
+    const wrong = "Dishelp";
+    const right = "DysHelp";
+
+    function typeText(text, speed, cb) {
+      let i = 0;
+      const it = setInterval(() => {
+        typedText.textContent = text.slice(0, ++i);
+        if (i >= text.length) {
+          clearInterval(it);
+          cb && setTimeout(cb, 250);
+        }
+      }, speed);
+    }
+
+    function backspace(count, speed, cb) {
+      let i = 0;
+      const it = setInterval(() => {
+        typedText.textContent = typedText.textContent.slice(0, -1);
+        if (++i >= count) {
+          clearInterval(it);
+          cb && setTimeout(cb, 150);
+        }
+      }, speed);
+    }
+
+    window.addEventListener('load', () => {
       if (window.matchMedia('(max-width: 1024px)').matches) {
-        // Mobile: on masque l’intro pour laisser le menu visible
-        if (intro) intro.style.display='none';
+        if (intro) intro.style.display = 'none';
         return;
       }
-      setTimeout(()=>{
+      setTimeout(() => {
         logoBadge.classList.add('logo-hide');
-        setTimeout(()=>{
-          typeText(wrong,90,()=>{
-            const idx=wrong.indexOf('i');
-            if(idx>=0){
-              eraser.style.display='flex';
-              backspace(wrong.length-idx,80,()=>{
-                typeText(right.slice(idx),85,()=>{
-                  eraser.style.display='none';
-                  setTimeout(()=>{intro.classList.add('intro-exit'); setTimeout(()=>intro.style.display='none',800)},400);
+        setTimeout(() => {
+          typeText(wrong, 90, () => {
+            const idx = wrong.indexOf('i');
+            if (idx >= 0) {
+              eraser.style.display = 'flex';
+              backspace(wrong.length - idx, 80, () => {
+                typeText(right.slice(idx), 85, () => {
+                  eraser.style.display = 'none';
+                  setTimeout(() => {
+                    intro.classList.add('intro-exit');
+                    setTimeout(() => intro.style.display = 'none', 800);
+                  }, 400);
                 });
               });
             } else {
-              setTimeout(()=>{intro.classList.add('intro-exit'); setTimeout(()=>intro.style.display='none',800)},500);
+              setTimeout(() => {
+                intro.classList.add('intro-exit');
+                setTimeout(() => intro.style.display = 'none', 800);
+              }, 500);
             }
           });
-        },300);
-      },900);
+        }, 300);
+      }, 900);
     });
 
     /* Carte: lien itinéraire */
-    const mapLink=document.getElementById('mapLink');
-    const address=encodeURIComponent('864 La Garenne des Cartes');
-    function mapsURL(){const isApple=/iPad|iPhone|Macintosh/.test(navigator.userAgent);return isApple?`https://maps.apple.com/?q=${address}`:`https://www.google.com/maps/search/?api=1&query=${address}`}
-    if(mapLink) mapLink.setAttribute('href',mapsURL());
+    const mapLink = document.getElementById('mapLink');
+    const address = encodeURIComponent('864 La Garenne des Cartes');
+
+    function mapsURL() {
+      const isApple = /iPad|iPhone|Macintosh/.test(navigator.userAgent);
+      return isApple ? `https://maps.apple.com/?q=${address}` : `https://www.google.com/maps/search/?api=1&query=${address}`;
+    }
+
+    if (mapLink) {
+      mapLink.setAttribute('href', mapsURL());
+    }
 
     /* Init fond */
     setVisibility();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97e94a2eb16f6f0c',t:'MTc1Nzc4Mzc1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
